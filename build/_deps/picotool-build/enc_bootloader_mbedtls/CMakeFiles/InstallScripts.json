@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/_deps/picotool-build/enc_bootloader_mbedtls/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
