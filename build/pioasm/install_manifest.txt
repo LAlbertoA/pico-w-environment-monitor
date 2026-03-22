@@ -1,5 +1,0 @@
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm-install/pioasm/pioasm
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm-install/pioasm/pioasmTargets.cmake
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm-install/pioasm/pioasmTargets-release.cmake
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm-install/pioasm/pioasmConfig.cmake
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm-install/pioasm/pioasmConfigVersion.cmake

@@ -1,7 +1,0 @@
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm/CMakeFiles/pioasm.dir
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm/CMakeFiles/edit_cache.dir
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm/CMakeFiles/rebuild_cache.dir
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm/CMakeFiles/list_install_components.dir
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm/CMakeFiles/install.dir
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm/CMakeFiles/install/local.dir
-/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm/CMakeFiles/install/strip.dir

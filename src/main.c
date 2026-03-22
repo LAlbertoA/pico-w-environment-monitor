@@ -22,7 +22,10 @@
 #include "ssd1306.h"
 #include "wifi.h"
 #include "http_post.h"
+<<<<<<< HEAD
 #include "debug_state.h"
+=======
+>>>>>>> main
 #include "oled.h"
 
 // Server configuration (can be overridden at compile time).
