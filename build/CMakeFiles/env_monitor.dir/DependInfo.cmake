@@ -352,10 +352,12 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c" "CMakeFiles/env_monitor.dir/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.o" "gcc" "CMakeFiles/env_monitor.dir/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.o.d"
   "/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c" "CMakeFiles/env_monitor.dir/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.o" "gcc" "CMakeFiles/env_monitor.dir/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.o.d"
   "/home/luis-arcos/Documents/pico-ssd1306/ssd1306.c" "CMakeFiles/env_monitor.dir/home/luis-arcos/Documents/pico-ssd1306/ssd1306.c.o" "gcc" "CMakeFiles/env_monitor.dir/home/luis-arcos/Documents/pico-ssd1306/ssd1306.c.o.d"
+  "/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/debug_state.c" "CMakeFiles/env_monitor.dir/src/debug_state.c.o" "gcc" "CMakeFiles/env_monitor.dir/src/debug_state.c.o.d"
   "/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/dht11.c" "CMakeFiles/env_monitor.dir/src/dht11.c.o" "gcc" "CMakeFiles/env_monitor.dir/src/dht11.c.o.d"
   "/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/http_post.c" "CMakeFiles/env_monitor.dir/src/http_post.c.o" "gcc" "CMakeFiles/env_monitor.dir/src/http_post.c.o.d"
   "/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/main.c" "CMakeFiles/env_monitor.dir/src/main.c.o" "gcc" "CMakeFiles/env_monitor.dir/src/main.c.o.d"
   "/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/mics6814.c" "CMakeFiles/env_monitor.dir/src/mics6814.c.o" "gcc" "CMakeFiles/env_monitor.dir/src/mics6814.c.o.d"
+  "/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/oled.c" "CMakeFiles/env_monitor.dir/src/oled.c.o" "gcc" "CMakeFiles/env_monitor.dir/src/oled.c.o.d"
   "/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/wifi.c" "CMakeFiles/env_monitor.dir/src/wifi.c.o" "gcc" "CMakeFiles/env_monitor.dir/src/wifi.c.o.d"
   "/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp" "CMakeFiles/env_monitor.dir/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.o" "gcc" "CMakeFiles/env_monitor.dir/home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.o.d"
   )

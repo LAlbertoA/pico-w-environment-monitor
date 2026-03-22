@@ -22,6 +22,8 @@
 #include "ssd1306.h"
 #include "wifi.h"
 #include "http_post.h"
+#include "debug_state.h"
+#include "oled.h"
 
 // Server configuration (can be overridden at compile time).
 #ifndef SERVER_IP
@@ -61,9 +63,7 @@ int main() {
     gpio_pull_up(SDA_PIN);
     gpio_pull_up(SCL_PIN);
 
-    disp.external_vcc = false;
-    ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
-    ssd1306_clear(&disp);
+    oled_init_display(&disp, I2C_PORT);
 
     bool wifi_ok = wifi_init_and_connect();
     bool screen_thingy = true;
@@ -130,15 +130,23 @@ int main() {
 
         if (time_reached(next_oled)) {
             char line1[32], line2[32], line3[32];
+            char dbg1[32], dbg2[32];
+
+            snprintf(dbg1, sizeof(dbg1), "%s", debug_phase_str(g_dbg_phase));
+            snprintf(dbg2, sizeof(dbg2), "E:%d P:%lu", g_dbg_code, g_dbg_post_count);
 
             ssd1306_clear(&disp);
-            ssd1306_draw_string(&disp, 0, 0, 1, wifi_ok ? "WiFi OK" : "WiFi FAIL");
+            draw_status_bar(&disp, wifi_ok, gas_ok, dht_ok);
+            ssd1306_draw_string(&disp, 2, 12, 1, wifi_ok ? "WiFi OK" : "WiFi FAIL");
+
+            ssd1306_draw_string(&disp, 2, 52, 1, dbg1);
+            ssd1306_draw_string(&disp, 64, 52, 1, dbg2);
 
             if (screen_thingy) {
-                ssd1306_draw_square(&disp, 96, 2, 28, 28);
+                ssd1306_draw_square(&disp, 96, 15, 28, 28);
                 screen_thingy = false;
             } else {
-                ssd1306_draw_empty_square(&disp, 96, 2, 27, 27);
+                ssd1306_draw_empty_square(&disp, 96, 15, 27, 27);
                 screen_thingy = true;
             }
             if (dht_ok) {
@@ -150,9 +158,9 @@ int main() {
             snprintf(line2, sizeof(line2), "CO:%u NH3:%u", co_raw, nh3_raw);
             snprintf(line3, sizeof(line3), "NO2:%u", no2_raw);
 
-            ssd1306_draw_string(&disp, 0, 10, 1, line1);
-            ssd1306_draw_string(&disp, 0, 20, 1, line2);
-            ssd1306_draw_string(&disp, 0, 30, 1, line3);
+            ssd1306_draw_string(&disp, 2, 22, 1, line1);
+            ssd1306_draw_string(&disp, 2, 32, 1, line2);
+            ssd1306_draw_string(&disp, 2, 42, 1, line3);
             ssd1306_show(&disp);
 
             next_oled = delayed_by_ms(next_oled, 1000);

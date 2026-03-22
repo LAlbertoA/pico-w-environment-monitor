@@ -116,4 +116,10 @@ CMakeFiles/env_monitor.dir/src/http_post.c.o: \
  /home/luis-arcos/.pico-sdk/sdk/2.2.0/lib/lwip/src/include/lwip/tcp.h \
  /home/luis-arcos/.pico-sdk/sdk/2.2.0/lib/lwip/src/include/lwip/tcpbase.h \
  /home/luis-arcos/.pico-sdk/sdk/2.2.0/lib/lwip/src/include/lwip/icmp.h \
- /home/luis-arcos/.pico-sdk/sdk/2.2.0/lib/lwip/src/include/lwip/prot/icmp.h
+ /home/luis-arcos/.pico-sdk/sdk/2.2.0/lib/lwip/src/include/lwip/prot/icmp.h \
+ /home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/debug_state.h \
+ /home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/src/oled.h \
+ /home/luis-arcos/Documents/pico-ssd1306/ssd1306.h \
+ /home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_i2c/include/hardware/i2c.h \
+ /home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2040/hardware_structs/include/hardware/structs/i2c.h \
+ /home/luis-arcos/.pico-sdk/sdk/2.2.0/src/rp2040/hardware_regs/include/hardware/regs/i2c.h

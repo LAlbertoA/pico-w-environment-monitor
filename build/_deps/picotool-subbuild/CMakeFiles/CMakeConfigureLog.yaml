@@ -20,11 +20,11 @@ events:
     names:
       - "uname"
     candidate_directories:
+      - "/home/luis-arcos/.nvm/versions/node/v24.13.1/bin/"
       - "/home/luis-arcos/.config/Code/User/globalStorage/github.copilot-chat/debugCommand/"
       - "/home/luis-arcos/.config/Code/User/globalStorage/github.copilot-chat/copilotCli/"
-      - "/home/luis-arcos/.local/bin/"
-      - "/home/luis-arcos/.nvm/versions/node/v24.13.1/bin/"
       - "/home/luis-arcos/.juliaup/bin/"
+      - "/home/luis-arcos/.local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/bin/"
       - "/usr/sbin/"
@@ -35,21 +35,20 @@ events:
       - "/usr/local/games/"
       - "/snap/bin/"
     searched_directories:
+      - "/home/luis-arcos/.nvm/versions/node/v24.13.1/bin/uname"
       - "/home/luis-arcos/.config/Code/User/globalStorage/github.copilot-chat/debugCommand/uname"
       - "/home/luis-arcos/.config/Code/User/globalStorage/github.copilot-chat/copilotCli/uname"
-      - "/home/luis-arcos/.local/bin/uname"
-      - "/home/luis-arcos/.nvm/versions/node/v24.13.1/bin/uname"
       - "/home/luis-arcos/.juliaup/bin/uname"
+      - "/home/luis-arcos/.local/bin/uname"
       - "/usr/local/sbin/uname"
       - "/usr/local/bin/uname"
       - "/usr/sbin/uname"
     found: "/usr/bin/uname"
     search_context:
       ENV{PATH}:
+        - "/home/luis-arcos/.nvm/versions/node/v24.13.1/bin"
         - "/home/luis-arcos/.config/Code/User/globalStorage/github.copilot-chat/debugCommand"
         - "/home/luis-arcos/.config/Code/User/globalStorage/github.copilot-chat/copilotCli"
-        - "/home/luis-arcos/.local/bin"
-        - "/home/luis-arcos/.nvm/versions/node/v24.13.1/bin"
         - "/home/luis-arcos/.juliaup/bin"
         - "/home/luis-arcos/.local/bin"
         - "/usr/local/sbin"
@@ -62,8 +61,6 @@ events:
         - "/usr/local/games"
         - "/snap/bin"
         - "/snap/bin"
-        - "/home/luis-arcos/.local/bin"
-        - "/home/luis-arcos/.local/bin"
         - "/home/luis-arcos/.local/bin"
         - "/home/luis-arcos/.local/bin"
   -

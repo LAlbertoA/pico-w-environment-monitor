@@ -4569,6 +4569,30 @@ home/luis-arcos/Documents/pico-ssd1306/ssd1306.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/env_monitor.dir/build.make CMakeFiles/env_monitor.dir/home/luis-arcos/Documents/pico-ssd1306/ssd1306.c.s
 .PHONY : home/luis-arcos/Documents/pico-ssd1306/ssd1306.c.s
 
+src/debug_state.o: src/debug_state.c.o
+.PHONY : src/debug_state.o
+
+# target to build an object file
+src/debug_state.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/env_monitor.dir/build.make CMakeFiles/env_monitor.dir/src/debug_state.c.o
+.PHONY : src/debug_state.c.o
+
+src/debug_state.i: src/debug_state.c.i
+.PHONY : src/debug_state.i
+
+# target to preprocess a source file
+src/debug_state.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/env_monitor.dir/build.make CMakeFiles/env_monitor.dir/src/debug_state.c.i
+.PHONY : src/debug_state.c.i
+
+src/debug_state.s: src/debug_state.c.s
+.PHONY : src/debug_state.s
+
+# target to generate assembly for a file
+src/debug_state.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/env_monitor.dir/build.make CMakeFiles/env_monitor.dir/src/debug_state.c.s
+.PHONY : src/debug_state.c.s
+
 src/dht11.o: src/dht11.c.o
 .PHONY : src/dht11.o
 
@@ -4664,6 +4688,30 @@ src/mics6814.s: src/mics6814.c.s
 src/mics6814.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/env_monitor.dir/build.make CMakeFiles/env_monitor.dir/src/mics6814.c.s
 .PHONY : src/mics6814.c.s
+
+src/oled.o: src/oled.c.o
+.PHONY : src/oled.o
+
+# target to build an object file
+src/oled.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/env_monitor.dir/build.make CMakeFiles/env_monitor.dir/src/oled.c.o
+.PHONY : src/oled.c.o
+
+src/oled.i: src/oled.c.i
+.PHONY : src/oled.i
+
+# target to preprocess a source file
+src/oled.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/env_monitor.dir/build.make CMakeFiles/env_monitor.dir/src/oled.c.i
+.PHONY : src/oled.c.i
+
+src/oled.s: src/oled.c.s
+.PHONY : src/oled.s
+
+# target to generate assembly for a file
+src/oled.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/env_monitor.dir/build.make CMakeFiles/env_monitor.dir/src/oled.c.s
+.PHONY : src/oled.c.s
 
 src/wifi.o: src/wifi.c.o
 .PHONY : src/wifi.o
@@ -5248,6 +5296,9 @@ help:
 	@echo "... home/luis-arcos/Documents/pico-ssd1306/ssd1306.o"
 	@echo "... home/luis-arcos/Documents/pico-ssd1306/ssd1306.i"
 	@echo "... home/luis-arcos/Documents/pico-ssd1306/ssd1306.s"
+	@echo "... src/debug_state.o"
+	@echo "... src/debug_state.i"
+	@echo "... src/debug_state.s"
 	@echo "... src/dht11.o"
 	@echo "... src/dht11.i"
 	@echo "... src/dht11.s"
@@ -5260,6 +5311,9 @@ help:
 	@echo "... src/mics6814.o"
 	@echo "... src/mics6814.i"
 	@echo "... src/mics6814.s"
+	@echo "... src/oled.o"
+	@echo "... src/oled.i"
+	@echo "... src/oled.s"
 	@echo "... src/wifi.o"
 	@echo "... src/wifi.i"
 	@echo "... src/wifi.s"
