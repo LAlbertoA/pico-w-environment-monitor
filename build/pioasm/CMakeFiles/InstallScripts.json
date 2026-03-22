@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/pioasm/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

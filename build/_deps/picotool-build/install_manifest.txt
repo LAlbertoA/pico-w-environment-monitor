@@ -1,0 +1,7 @@
+/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/_deps/picotool/picotool
+/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/_deps/picotool/picotoolTargets.cmake
+/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/_deps/picotool/picotoolTargets-release.cmake
+/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/_deps/picotool/picotoolConfig.cmake
+/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/_deps/picotool/picotoolConfigVersion.cmake
+/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/_deps/picotool/enc_bootloader.elf
+/home/luis-arcos/Documents/RaspberryPiPico/PicoW_GHT_Oled/build/_deps/picotool/enc_bootloader_mbedtls.elf
