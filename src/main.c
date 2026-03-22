@@ -22,6 +22,7 @@
 #include "ssd1306.h"
 #include "wifi.h"
 #include "http_post.h"
+#include "oled.h"
 
 // Server configuration (can be overridden at compile time).
 #ifndef SERVER_IP
@@ -132,13 +133,14 @@ int main() {
             char line1[32], line2[32], line3[32];
 
             ssd1306_clear(&disp);
-            ssd1306_draw_string(&disp, 0, 0, 1, wifi_ok ? "WiFi OK" : "WiFi FAIL");
+            draw_status_bar(&disp, wifi_ok, gas_ok, dht_ok);
+            ssd1306_draw_string(&disp, 0, 12, 1, wifi_ok ? "WiFi OK" : "WiFi FAIL");
 
             if (screen_thingy) {
-                ssd1306_draw_square(&disp, 96, 2, 28, 28);
+                ssd1306_draw_square(&disp, 100, 16, 24, 24);
                 screen_thingy = false;
             } else {
-                ssd1306_draw_empty_square(&disp, 96, 2, 27, 27);
+                ssd1306_draw_empty_square(&disp, 100, 16, 23, 23);
                 screen_thingy = true;
             }
             if (dht_ok) {
@@ -150,9 +152,9 @@ int main() {
             snprintf(line2, sizeof(line2), "CO:%u NH3:%u", co_raw, nh3_raw);
             snprintf(line3, sizeof(line3), "NO2:%u", no2_raw);
 
-            ssd1306_draw_string(&disp, 0, 10, 1, line1);
-            ssd1306_draw_string(&disp, 0, 20, 1, line2);
-            ssd1306_draw_string(&disp, 0, 30, 1, line3);
+            ssd1306_draw_string(&disp, 0, 22, 1, line1);
+            ssd1306_draw_string(&disp, 0, 32, 1, line2);
+            ssd1306_draw_string(&disp, 0, 42, 1, line3);
             ssd1306_show(&disp);
 
             next_oled = delayed_by_ms(next_oled, 1000);
