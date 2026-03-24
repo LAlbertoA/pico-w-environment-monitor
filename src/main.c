@@ -56,7 +56,7 @@ int main() {
 
     // Initialize NTP for timekeeping before anything else.
     ntp_init();
-    setenv("TZ", "CST6CDT", 1);
+    setenv("TZ", "CST6", 1);
     tzset();
 
     // Initialize WiFi, sensors, and OLED display.
