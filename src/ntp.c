@@ -186,7 +186,7 @@ time_t ntp_get_epoch(void) {
     return g_ntp.epoch_at_sync + (time_t)((now_ms - g_ntp.ms_at_sync) / 1000);
 }
 
-void ntp_get_hms(char *buf, size_t n) {
+void ntp_get_time_str(char *buf, size_t n) {
     if (!g_ntp.synced) {
         snprintf(buf, n, "--:--:--");
         return;
@@ -197,6 +197,41 @@ void ntp_get_hms(char *buf, size_t n) {
 
     if (!local) {
         snprintf(buf, n, "--:--:--");
+        return;
+    }
+
+    snprintf(buf, n, "%02d:%02d:%02d", local->tm_hour, local->tm_min, local->tm_sec);
+}
+
+void ntp_get_date_str(char *buf, size_t n) {
+    if (!g_ntp.synced) {
+        snprintf(buf, n, "--/--/----");
+        return;
+    }
+
+    time_t now = ntp_get_epoch();
+    struct tm *local = localtime(&now);
+
+    if (!local) {
+        snprintf(buf, n, "--/--/----");
+        return;
+    }
+
+    snprintf(buf, n, "%02d/%02d/%04d",
+             local->tm_mday, local->tm_mon + 1, local->tm_year + 1900);
+}
+
+void ntp_get_datetime_str(char *buf, size_t n) {
+    if (!g_ntp.synced) {
+        snprintf(buf, n, "----/--/-- --:--:--");
+        return;
+    }
+
+    time_t now = ntp_get_epoch();
+    struct tm *local = localtime(&now);
+
+    if (!local) {
+        snprintf(buf, n, "----/--/-- --:--:--");
         return;
     }
 
