@@ -23,6 +23,7 @@
 #include "wifi.h"
 #include "http_post.h"
 #include "oled.h"
+#include "ntp.h"
 
 // Server configuration (can be overridden at compile time).
 #ifndef SERVER_IP
