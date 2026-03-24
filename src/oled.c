@@ -4,6 +4,7 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "ssd1306.h"
+#include "ntp.h"
 
 extern ssd1306_t disp;
 
@@ -45,6 +46,8 @@ void draw_wifi_icon(ssd1306_t *disp, uint32_t pos_x, uint32_t pos_y, bool connec
 }
 
 void draw_status_bar(ssd1306_t *disp, bool wifi_connected, bool gas_ok, bool temp_ok) {
+    char time_str[32];
+    ntp_get_time_str(time_str, sizeof(time_str));
     ssd1306_draw_line(disp, 0, 0, 127, 0);
     ssd1306_draw_line(disp, 127, 0, 127, 63);
     ssd1306_draw_line(disp, 0, 63, 127, 63);
