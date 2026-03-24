@@ -62,18 +62,25 @@ void draw_status_bar(ssd1306_t *disp, bool wifi_connected, bool gas_ok, bool tem
     if (temp_ok) {
         ssd1306_draw_string(disp, 99, 2, 1, "T");
     }
+    ssd1306_draw_string(disp, 2, 2, 1, time_str);
 }
 
 void oled_debug_mark(const char *msg) {
+    char time_str[32];
+    ntp_get_time_str(time_str, sizeof(time_str));
     ssd1306_clear(&disp);
     ssd1306_draw_string(&disp, 0, 0, 1, "DBG:");
     ssd1306_draw_string(&disp, 0, 16, 1, msg);
+    ssd1306_draw_string(&disp, 0, 32, 1, time_str);
     ssd1306_show(&disp);
 }
 
 void oled_debug_mark2(const char *msg1, const char *msg2) {
+    char time_str[32];
+    ntp_get_time_str(time_str, sizeof(time_str));
     ssd1306_clear(&disp);
     ssd1306_draw_string(&disp, 0, 0, 1, msg1);
     ssd1306_draw_string(&disp, 0, 16, 1, msg2);
+    ssd1306_draw_string(&disp, 0, 32, 1, time_str);
     ssd1306_show(&disp);
 }

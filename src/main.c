@@ -153,7 +153,7 @@ int main() {
             ssd1306_draw_string(&disp, 2, 12, 1, wifi_ok ? "WiFi OK" : "WiFi FAIL");
 
             ssd1306_draw_string(&disp, 2, 52, 1, dbg1);
-            ssd1306_draw_string(&disp, 64, 52, 1, dbg2);
+            ssd1306_draw_string(&disp, 56, 52, 1, dbg2);
 
             if (screen_thingy) {
                 ssd1306_draw_square(&disp, 96, 15, 28, 28);
