@@ -23,6 +23,7 @@
 #include "wifi.h"
 #include "http_post.h"
 #include "oled.h"
+#include "ntp.h"
 
 // Server configuration (can be overridden at compile time).
 #ifndef SERVER_IP
@@ -53,6 +54,12 @@ int main() {
     stdio_init_all();
     sleep_ms(2000);
 
+    // Initialize NTP for timekeeping before anything else.
+    ntp_init();
+    setenv("TZ", "CST6CDT", 1);
+    tzset();
+
+    // Initialize WiFi, sensors, and OLED display.
     dht11_init(DHT_PIN);
     mics6814_init(CO_GPIO, NH3_GPIO, NO2_GPIO);
 
@@ -81,6 +88,7 @@ int main() {
 
     while (true) {
 
+        // Check WiFi connection every 5 seconds and attempt reconnection if needed.
         if (time_reached(next_wifi_chk)) {
             wifi_ok = wifi_is_connected();
             if (!wifi_ok) {
@@ -91,6 +99,7 @@ int main() {
             next_wifi_chk = delayed_by_ms(next_wifi_chk, 5000);
         }
 
+        // Read DHT11 every 10 seconds and POST data if WiFi is connected.
         if (time_reached(next_dht)) {
             dht_ok = dht11_read(&t, &h);
             if (wifi_ok && dht_ok) {
@@ -105,6 +114,7 @@ int main() {
             next_dht = delayed_by_ms(next_dht, 10000);
         }
 
+        // Read MICS6814 gas sensor every 4 seconds and POST data if WiFi is connected.
         if (time_reached(next_gas)) {
             gas_ok = mics6814_read(&co_raw, &nh3_raw, &no2_raw);
 
@@ -129,8 +139,11 @@ int main() {
             next_gas = delayed_by_ms(next_gas, 4000);
         }
 
+        // Update OLED display every second with latest sensor readings and status.
         if (time_reached(next_oled)) {
             char line1[32], line2[32], line3[32];
+
+            ntp_poll(); // Poll NTP to keep time updated for display
 
             ssd1306_clear(&disp);
             draw_status_bar(&disp, wifi_ok, gas_ok, dht_ok);
