@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+#ifndef OLED_DEBUG
+#define OLED_DEBUG 0
+#endif
+
+#if OLED_DEBUG
 typedef enum {
     DBG_IDLE = 0,
     DBG_WIFI_CHECK,
@@ -26,8 +31,10 @@ typedef enum {
 extern volatile debug_phase_t g_dbg_phase;
 extern volatile int g_dbg_code;
 extern volatile uint32_t g_dbg_heartbeat;
-extern volatile uint32_t g_dbg_post_count;
 
 const char *debug_phase_str(debug_phase_t p);
+#endif
+
+extern volatile uint32_t g_dbg_post_count;
 
 #endif

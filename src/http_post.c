@@ -10,6 +10,7 @@
 #include "lwip/ip_addr.h"
 #include "debug_state.h"
 #include "oled.h"
+#include "debug.h"
 
 typedef struct {
     bool done;
@@ -32,8 +33,7 @@ static void on_err(void *arg, err_t err) {
     res->success = false;
     res->err_code = err;
 
-    g_dbg_phase = DBG_HTTP_FAIL;
-    g_dbg_code = err;
+    DBG_SET(DBG_HTTP_FAIL, err);
 }
 
 static err_t on_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err) {
@@ -44,8 +44,7 @@ static err_t on_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
         res->success = (err == ERR_OK);
         res->err_code = err;
 
-        g_dbg_phase = res->success ? DBG_HTTP_SUCCESS : DBG_HTTP_FAIL;
-        g_dbg_code = err;
+        DBG_SET(res->success ? DBG_HTTP_SUCCESS : DBG_HTTP_FAIL, err);
 
         cyw43_arch_lwip_begin();
         tcp_arg(tpcb, NULL);
@@ -75,8 +74,8 @@ static err_t on_connected(void *arg, struct tcp_pcb *tpcb, err_t err) {
         res->success = false;
         res->err_code = err;
 
-        g_dbg_phase = DBG_HTTP_FAIL;
-        g_dbg_code = err;
+        DBG_SET(DBG_HTTP_FAIL, err);
+
         return err;
     }
     return ERR_OK;
@@ -84,15 +83,14 @@ static err_t on_connected(void *arg, struct tcp_pcb *tpcb, err_t err) {
 
 bool http_post_text(const char *server_ip, int port,
                     const char *path, const char *body) {
-    g_dbg_code = 0;
-    g_dbg_phase = DBG_HTTP_TCP_NEW;
-    oled_debug_mark("TCP_NEW");
+    
+    DBG_SET(DBG_HTTP_TCP_NEW, 0);
+    DBG_OLED("TCP_NEW");
 
     ip_addr_t addr;
     if (!ipaddr_aton(server_ip, &addr)) {
-        g_dbg_phase = DBG_HTTP_FAIL;
-        g_dbg_code = -1001;
-        oled_debug_mark("BAD_IP");
+        DBG_SET(DBG_HTTP_FAIL, -1001);
+        DBG_OLED("BAD_IP");
         return false;
     }
 
@@ -101,9 +99,8 @@ bool http_post_text(const char *server_ip, int port,
     cyw43_arch_lwip_end();
 
     if (!pcb) {
-        g_dbg_phase = DBG_HTTP_FAIL;
-        g_dbg_code = -1002;
-        oled_debug_mark("NO_PCB");
+        DBG_SET(DBG_HTTP_FAIL, -1002);
+        DBG_OLED("NO_PCB");
         return false;
     }
 
@@ -116,17 +113,16 @@ bool http_post_text(const char *server_ip, int port,
     tcp_err(pcb, on_err);
     cyw43_arch_lwip_end();
 
-    g_dbg_phase = DBG_HTTP_TCP_CONNECT;
-    oled_debug_mark("TCP_CONN");
+    DBG_SET(DBG_HTTP_TCP_CONNECT, 0);
+    DBG_OLED("TCP_CONN");
 
     cyw43_arch_lwip_begin();
     err_t err = tcp_connect(pcb, &addr, port, on_connected);
     cyw43_arch_lwip_end();
 
     if (err != ERR_OK) {
-        g_dbg_phase = DBG_HTTP_FAIL;
-        g_dbg_code = err;
-        oled_debug_mark("CONN_FAIL");
+        DBG_SET(DBG_HTTP_FAIL, err);
+        DBG_OLED("CONN_FAIL");
 
         cyw43_arch_lwip_begin();
         tcp_abort(pcb);
@@ -139,11 +135,11 @@ bool http_post_text(const char *server_ip, int port,
     bool request_sent = false;
 
     while (!result.done && (to_ms_since_boot(get_absolute_time()) - start < 5000)) {
-        g_dbg_heartbeat++;
+        DBG_HEARTBEAT_INC();
 
         if (!request_sent) {
-            g_dbg_phase = DBG_HTTP_WAIT_EST;
-            oled_debug_mark("WAIT_EST");
+            DBG_SET(DBG_HTTP_WAIT_EST, 0);
+            DBG_OLED("WAIT_EST");
         }
 
         if (!request_sent && pcb->state == ESTABLISHED) {
@@ -159,18 +155,17 @@ bool http_post_text(const char *server_ip, int port,
                 path, server_ip, port, (int)strlen(body), body
             );
 
-            g_dbg_phase = DBG_HTTP_TCP_WRITE;
-            g_dbg_code = 0;
-            oled_debug_mark("TCP_WRITE");
+            DBG_SET(DBG_HTTP_TCP_WRITE, 0);
+            DBG_OLED("TCP_WRITE");
 
             cyw43_arch_lwip_begin();
             err_t werr = tcp_write(pcb, req, len, TCP_WRITE_FLAG_COPY);
             cyw43_arch_lwip_end();
 
             if (werr != ERR_OK) {
-                g_dbg_phase = DBG_HTTP_FAIL;
-                g_dbg_code = werr;
-                oled_debug_mark("WR_FAIL");
+
+                DBG_SET(DBG_HTTP_FAIL, werr);
+                DBG_OLED("WR_FAIL");
 
                 cyw43_arch_lwip_begin();
                 tcp_abort(pcb);
@@ -179,17 +174,17 @@ bool http_post_text(const char *server_ip, int port,
                 return false;
             }
 
-            g_dbg_phase = DBG_HTTP_TCP_OUTPUT;
-            oled_debug_mark("TCP_OUT");
+            DBG_SET(DBG_HTTP_TCP_OUTPUT, 0);
+            DBG_OLED("TCP_OUT");
 
             cyw43_arch_lwip_begin();
             err_t oerr = tcp_output(pcb);
             cyw43_arch_lwip_end();
 
             if (oerr != ERR_OK) {
-                g_dbg_phase = DBG_HTTP_FAIL;
-                g_dbg_code = oerr;
-                oled_debug_mark("OUT_FAIL");
+
+                DBG_SET(DBG_HTTP_FAIL, oerr);
+                DBG_OLED("OUT_FAIL");
 
                 cyw43_arch_lwip_begin();
                 tcp_abort(pcb);
@@ -199,17 +194,16 @@ bool http_post_text(const char *server_ip, int port,
             }
 
             request_sent = true;
-            g_dbg_phase = DBG_HTTP_WAIT_DONE;
-            oled_debug_mark("WAIT_DONE");
+            DBG_SET(DBG_HTTP_WAIT_DONE, 0);
+            DBG_OLED("WAIT_DONE");
         }
 
         sleep_ms(10);
     }
 
     if (!result.done) {
-        g_dbg_phase = DBG_HTTP_TIMEOUT;
-        g_dbg_code = -1003;
-        oled_debug_mark("TIMEOUT");
+        DBG_SET(DBG_HTTP_TIMEOUT, -1003);
+        DBG_OLED("TIMEOUT");
 
         cyw43_arch_lwip_begin();
         tcp_abort(pcb);
@@ -220,13 +214,11 @@ bool http_post_text(const char *server_ip, int port,
 
     if (result.success) {
         g_dbg_post_count++;
-        g_dbg_phase = DBG_HTTP_SUCCESS;
-        g_dbg_code = 0;
-        oled_debug_mark("HTTP_OK");
+        DBG_SET(DBG_HTTP_SUCCESS, 0);
+        DBG_OLED("HTTP_OK");
     } else {
-        g_dbg_phase = DBG_HTTP_FAIL;
-        g_dbg_code = result.err_code;
-        oled_debug_mark("HTTP_FAIL");
+        DBG_SET(DBG_HTTP_FAIL, result.err_code);
+        DBG_OLED("HTTP_FAIL");
     }
 
     return result.success;

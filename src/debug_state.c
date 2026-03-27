@@ -1,9 +1,9 @@
 #include "debug_state.h"
 
+#if OLED_DEBUG
 volatile debug_phase_t g_dbg_phase = DBG_IDLE;
 volatile int g_dbg_code = 0;
 volatile uint32_t g_dbg_heartbeat = 0;
-volatile uint32_t g_dbg_post_count = 0;
 
 const char *debug_phase_str(debug_phase_t p) {
     switch (p) {
@@ -27,3 +27,6 @@ const char *debug_phase_str(debug_phase_t p) {
         default: return "UNKNOWN";
     }
 }
+#endif
+
+volatile uint32_t g_dbg_post_count = 0;

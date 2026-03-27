@@ -141,10 +141,12 @@ int main() {
         // Update OLED display every second with latest sensor readings and status.
         if (time_reached(next_oled)) {
             char line1[32], line2[32], line3[32];
+#if OLED_DEBUG
             char dbg1[32], dbg2[32];
 
             snprintf(dbg1, sizeof(dbg1), "%s", debug_phase_str(g_dbg_phase));
             snprintf(dbg2, sizeof(dbg2), "E:%d P:%lu", g_dbg_code, g_dbg_post_count);
+#endif
 
             ntp_poll(); // Poll NTP to keep time updated for display
 
@@ -152,9 +154,10 @@ int main() {
             draw_status_bar(&disp, wifi_ok, gas_ok, dht_ok);
             ssd1306_draw_string(&disp, 2, 12, 1, wifi_ok ? "WiFi OK" : "WiFi FAIL");
 
+#if OLED_DEBUG
             ssd1306_draw_string(&disp, 2, 52, 1, dbg1);
             ssd1306_draw_string(&disp, 56, 52, 1, dbg2);
-
+#endif
             if (screen_thingy) {
                 ssd1306_draw_square(&disp, 96, 15, 28, 28);
                 screen_thingy = false;
