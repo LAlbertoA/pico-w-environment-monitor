@@ -1,0 +1,51 @@
+cmake_minimum_required(VERSION 3.13)
+
+set(PICO_BOARD pico_w)
+
+include(pico_sdk_import.cmake)
+
+project(env_monitor_pico_w C CXX ASM)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+
+pico_sdk_init()
+
+set(OLED_DIR /home/luis-arcos/Documents/pico-ssd1306)
+
+add_executable(env_monitor
+    src/main.c
+    src/wifi.c
+    src/http_post.c
+    src/dht11.c
+    src/mics6814.c
+    src/oled.c
+    src/debug_state.c
+    src/ntp.c
+    ${OLED_DIR}/ssd1306.c
+)
+
+target_include_directories(env_monitor PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}
+    ${OLED_DIR}
+)
+
+target_compile_definitions(env_monitor PRIVATE OLED_DEBUG=0
+    WIFI_SSID=\"the name of my wifi\"
+    WIFI_PASSWORD=\"the pasword of my wifi\"
+    SERVER_IP=\"the ip of my server\"
+    SERVER_PORT=the port of my server
+)
+
+target_link_libraries(env_monitor
+    pico_stdlib
+    hardware_adc
+    hardware_gpio
+    hardware_i2c
+    pico_cyw43_arch_lwip_threadsafe_background
+)
+
+pico_enable_stdio_usb(env_monitor 1)
+pico_enable_stdio_uart(env_monitor 0)
+
+pico_add_extra_outputs(env_monitor)
+# Remember to export PICO_SDK_PATH=/path/to/.pico-sdk/sdk/2.2.0/
