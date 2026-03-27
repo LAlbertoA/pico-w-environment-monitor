@@ -159,10 +159,10 @@ int main() {
             ssd1306_draw_string(&disp, 56, 52, 1, dbg2);
 #endif
             if (screen_thingy) {
-                ssd1306_draw_square(&disp, 96, 15, 28, 28);
+                ssd1306_draw_square(&disp, 100, 15, 24, 24);
                 screen_thingy = false;
             } else {
-                ssd1306_draw_empty_square(&disp, 96, 15, 27, 27);
+                ssd1306_draw_empty_square(&disp, 100, 15, 23, 23);
                 screen_thingy = true;
             }
             if (dht_ok) {
