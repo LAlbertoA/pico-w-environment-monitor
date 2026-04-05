@@ -93,14 +93,7 @@ int main() {
     // Initialize button input
     button_init(BTN_PIN);
 
-    //bool wifi_ok = wifi_init_and_connect();
-    bool screen_thingy = true;
-
-    //int t = 0, h = 0;
-    //bool dht_ok = false;
-    //bool gas_ok = false;
-    //uint16_t co_raw = 0, nh3_raw = 0, no2_raw = 0;
-
+    // Setup initial status flags and sensor data
     status_flags.wifi_ok = wifi_init_and_connect();
     status_flags.dht_ok  = false;
     status_flags.gas_ok  = false;
@@ -171,7 +164,7 @@ int main() {
 
         // Update OLED display every second with latest sensor readings and status.
         if (time_reached(next_oled)) {
-            //char line1[32], line2[32], line3[32];
+
 #if OLED_DEBUG
             char dbg1[32], dbg2[32];
 
@@ -181,36 +174,13 @@ int main() {
 
             ntp_poll(); // Poll NTP to keep time updated for display
 
-            //ssd1306_clear(&disp);
-            //draw_status_bar(&disp, wifi_ok, gas_ok, dht_ok);
-            //ssd1306_draw_string(&disp, 2, 12, 1, wifi_ok ? "WiFi OK" : "WiFi FAIL");
             draw_current_screen(&disp, current_screen, &status_flags, &sensor_data);
 
 #if OLED_DEBUG
             ssd1306_draw_string(&disp, 2, 52, 1, dbg1);
             ssd1306_draw_string(&disp, 56, 52, 1, dbg2);
-#endif
-            if (screen_thingy) {
-                ssd1306_draw_square(&disp, 100, 15, 24, 24);
-                screen_thingy = false;
-            } else {
-                ssd1306_draw_empty_square(&disp, 100, 15, 23, 23);
-                screen_thingy = true;
-            }
-            //if (dht_ok) {
-            //    snprintf(line1, sizeof(line1), "T:%dC H:%d%%", t, h);
-            //} else {
-            //    snprintf(line1, sizeof(line1), "DHT FAIL");
-            //}
-
-            //snprintf(line2, sizeof(line2), "CO:%u NH3:%u", co_raw, nh3_raw);
-            //snprintf(line3, sizeof(line3), "NO2:%u", no2_raw);
-
-            //ssd1306_draw_string(&disp, 2, 22, 1, line1);
-            //ssd1306_draw_string(&disp, 2, 32, 1, line2);
-            //ssd1306_draw_string(&disp, 2, 42, 1, line3);
             ssd1306_show(&disp);
-
+#endif
             next_oled = delayed_by_ms(next_oled, 1000);
         }
         update_ui(&disp, &status_flags, &sensor_data);
