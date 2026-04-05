@@ -5,6 +5,7 @@
 #include "hardware/i2c.h"
 #include "ssd1306.h"
 #include "ntp.h"
+#include "oled.h"
 
 extern ssd1306_t disp;
 
@@ -46,14 +47,16 @@ void draw_wifi_icon(ssd1306_t *disp, uint32_t pos_x, uint32_t pos_y, bool connec
 }
 
 void draw_status_bar(ssd1306_t *disp, bool wifi_connected, bool gas_ok, bool temp_ok) {
+    
     char time_str[32];
     ntp_get_time_str(time_str, sizeof(time_str));
+    
     ssd1306_draw_line(disp, 0, 0, 127, 0);
     ssd1306_draw_line(disp, 127, 0, 127, 63);
     ssd1306_draw_line(disp, 0, 63, 127, 63);
     ssd1306_draw_line(disp, 0, 0, 0, 63);
-
     ssd1306_draw_line(disp, 0, 11, 127, 11);
+    
     draw_wifi_icon(disp, 117, 1, wifi_connected);
 
     if (gas_ok) {
@@ -62,7 +65,70 @@ void draw_status_bar(ssd1306_t *disp, bool wifi_connected, bool gas_ok, bool tem
     if (temp_ok) {
         ssd1306_draw_string(disp, 99, 2, 1, "T");
     }
+
     ssd1306_draw_string(disp, 2, 2, 1, time_str);
+}
+
+void draw_screen_main(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
+    char buf1[32];
+    char buf2[32];
+
+    ssd1306_clear(disp);
+    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
+
+    ssd1306_draw_string(disp, 2, 12, 1, flags->wifi_ok ? "WiFi OK" : "WiFi FAIL");
+    
+    if (flags->dht_ok) {
+        snprintf(buf1, sizeof(buf1), "T:%dC H:%d%%", data->t, data->h);
+    } else {
+        snprintf(buf1, sizeof(buf1), "DHT11 FAIL");
+    }
+    ssd1306_draw_string(disp, 2, 22, 1, buf1);
+
+    if (flags->gas_ok) {
+        snprintf(buf1, sizeof(buf1), "CO:%u NH3:%u", data->co_raw, data->nh3_raw);
+        snprintf(buf2, sizeof(buf2), "NO2:%u", data->no2_raw);
+    } else {
+        snprintf(buf1, sizeof(buf1), "GAS (CO, NH3) FAIL");
+        snprintf(buf2, sizeof(buf2), "GAS (NO2) FAIL");
+    }
+
+    ssd1306_draw_string(disp, 2, 32, 1, buf1);
+    ssd1306_draw_string(disp, 2, 42, 1, buf2);
+
+    ssd1306_show(disp);
+}
+
+void draw_screen_second(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
+
+    ssd1306_clear(disp);
+    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
+
+    ssd1306_draw_string(disp, 2, 12, 1, "Second Screen");
+    ssd1306_draw_string(disp, 2, 22, 1, "More details here...");
+
+    ssd1306_draw_string(disp, 2, 32, 2, "Test size");
+
+    ssd1306_show(disp);
+}
+
+void draw_current_screen(ssd1306_t *disp,
+                        oled_screen_t screen,
+                        const oled_flags_t *flags,
+                        const sensor_data_t *data) {
+    switch (screen) {
+        case SCREEN_MAIN:
+            draw_screen_main(disp, flags, data);
+            break;
+
+        case SCREEN_SECOND:
+            draw_screen_second(disp, flags, data);
+            break;
+
+        default:
+            draw_screen_main(disp, flags, data);
+            break;
+    }
 }
 
 void oled_debug_mark(const char *msg) {
