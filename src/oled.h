@@ -24,6 +24,7 @@ typedef enum {
     SCREEN_SECOND,
     SCREEN_THIRD,
     SCREEN_FOURTH,
+    SCREEN_FIFTH,
     SCREEN_COUNT
 } oled_screen_t;
 
@@ -39,10 +40,17 @@ void draw_screen_main(ssd1306_t *disp, const oled_flags_t *flags, const sensor_d
 void draw_screen_second(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data);
 void draw_screen_third(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data);
 void draw_screen_fourth(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data);
+void draw_screen_fifth(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data);
 void draw_current_screen(ssd1306_t *disp,
-                              oled_screen_t screen,
-                              const oled_flags_t *flags,
-                              const sensor_data_t *data);
+                        oled_screen_t screen,
+                        const oled_flags_t *flags,
+                        const sensor_data_t *data);
+void draw_icon_1bit(ssd1306_t *disp,
+                    uint32_t x,
+                    uint32_t y,
+                    const uint8_t *icon,
+                    uint32_t width,
+                    uint32_t height);
 
 // DEBUG
 void oled_debug_mark(const char *msg);
