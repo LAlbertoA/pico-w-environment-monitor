@@ -22,6 +22,8 @@ typedef struct {
 typedef enum {
     SCREEN_MAIN = 0,
     SCREEN_SECOND,
+    SCREEN_THIRD,
+    SCREEN_FOURTH,
     SCREEN_COUNT
 } oled_screen_t;
 
@@ -35,6 +37,8 @@ void draw_status_bar(ssd1306_t *disp, bool wifi, bool gas_ok, bool temp_ok);
 // Screens
 void draw_screen_main(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data);
 void draw_screen_second(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data);
+void draw_screen_third(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data);
+void draw_screen_fourth(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data);
 void draw_current_screen(ssd1306_t *disp,
                               oled_screen_t screen,
                               const oled_flags_t *flags,

@@ -100,14 +100,63 @@ void draw_screen_main(ssd1306_t *disp, const oled_flags_t *flags, const sensor_d
 }
 
 void draw_screen_second(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
+    char buf1[32];
+    char buf2[32];
 
     ssd1306_clear(disp);
     draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
 
-    ssd1306_draw_string(disp, 2, 12, 1, "Second Screen");
-    ssd1306_draw_string(disp, 2, 22, 1, "More details here...");
+    if (flags->dht_ok) {
+        snprintf(buf1, sizeof(buf1), "T:%dC", data->t);
+        snprintf(buf2, sizeof(buf2), "H:%d%%", data->h);
+    } else {
+        snprintf(buf1, sizeof(buf1), "DHT11 FAIL");
+        snprintf(buf2, sizeof(buf2), "Waiting ...");
+    }
+    ssd1306_draw_string(disp, 2, 13, 2, buf1);
+    ssd1306_draw_string(disp, 2, 33, 2, buf2);
 
-    ssd1306_draw_string(disp, 2, 32, 2, "Test size");
+    ssd1306_show(disp);
+}
+
+void draw_screen_third(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
+    char buf1[32];
+    char buf2[32];
+    char buf3[32];
+
+    ssd1306_clear(disp);
+    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
+
+    if (flags->gas_ok) {
+        snprintf(buf1, sizeof(buf1), "CO:%u", data->co_raw);
+        snprintf(buf2, sizeof(buf2), "NH3:%u", data->nh3_raw);
+        snprintf(buf3, sizeof(buf3), "NO2:%u", data->no2_raw);
+    } else {
+        snprintf(buf1, sizeof(buf1), "GAS FAIL");
+        snprintf(buf2, sizeof(buf2), "Waiting ...");
+        snprintf(buf3, sizeof(buf3), "");
+    }
+    ssd1306_draw_string(disp, 2, 13, 2, buf1);
+    ssd1306_draw_string(disp, 2, 30, 2, buf2);
+    ssd1306_draw_string(disp, 2, 47, 2, buf3);
+
+    ssd1306_show(disp);
+}
+
+void draw_screen_fourth(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
+    char buf1[32];
+    char buf2[32];
+
+    ssd1306_clear(disp);
+    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
+
+    ntp_get_date_str(buf1, sizeof(buf1));
+    ntp_get_time_str(buf2, sizeof(buf2));
+    char* buf3 = getenv("TZ") ? tzname[0] : "UTC";
+
+    ssd1306_draw_string(disp, 2, 13, 2, buf1);
+    ssd1306_draw_string(disp, 2, 30, 2, buf2);
+    ssd1306_draw_string(disp, 2, 47, 2, buf3);
 
     ssd1306_show(disp);
 }
@@ -123,6 +172,14 @@ void draw_current_screen(ssd1306_t *disp,
 
         case SCREEN_SECOND:
             draw_screen_second(disp, flags, data);
+            break;
+
+        case SCREEN_THIRD:
+            draw_screen_third(disp, flags, data);
+            break;
+        
+        case SCREEN_FOURTH:
+            draw_screen_fourth(disp, flags, data);
             break;
 
         default:
