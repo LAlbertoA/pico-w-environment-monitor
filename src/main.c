@@ -89,6 +89,8 @@ int main() {
     gpio_pull_up(SCL_PIN);
 
     oled_init_display(&disp, I2C_PORT);
+    
+    draw_screen_startup(&disp);
 
     // Initialize button input
     button_init(BTN_PIN);
@@ -108,8 +110,6 @@ int main() {
     absolute_time_t next_gas      = make_timeout_time_ms(4000);
     absolute_time_t next_wifi_chk = make_timeout_time_ms(5000);
     absolute_time_t next_oled     = make_timeout_time_ms(1000);
-
-    draw_screen_startup(&disp);
 
     while (true) {
 
