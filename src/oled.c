@@ -186,22 +186,6 @@ void draw_screen_fourth(ssd1306_t *disp, const oled_flags_t *flags, const sensor
     ssd1306_show(disp);
 }
 
-void draw_screen_fifth(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
-    char buf1[32];
-    char buf2[32];
-
-    ssd1306_clear(disp);
-    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
-
-    draw_icon_1bit(disp, 2, 13, icon_gas, 16, 16);
-    draw_icon_1bit(disp, 2, 40, icon_cloud_32x19, 32, 19);
-    draw_icon_1bit(disp, 35, 13, icon_hum, 16, 16);
-    draw_icon_1bit(disp, 35, 46, icon_air, 16, 16);
-    draw_icon_1bit(disp, 64, 13, icon_weather_combo_64x32, 64, 32);
-
-    ssd1306_show(disp);
-}
-
 void draw_screen_startup(ssd1306_t *disp) {
     ssd1306_clear(disp);
     draw_icon_1bit(disp, 32, 20, icon_cloud_64x32, 64, 32);
@@ -227,10 +211,6 @@ void draw_current_screen(ssd1306_t *disp,
         
         case SCREEN_FOURTH:
             draw_screen_fourth(disp, flags, data);
-            break;
-
-        case SCREEN_FIFTH:
-            draw_screen_fifth(disp, flags, data);
             break;
 
         default:

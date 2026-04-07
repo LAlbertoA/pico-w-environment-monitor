@@ -24,7 +24,6 @@ typedef enum {
     SCREEN_SECOND,
     SCREEN_THIRD,
     SCREEN_FOURTH,
-    SCREEN_FIFTH,
     SCREEN_COUNT
 } oled_screen_t;
 
