@@ -45,6 +45,7 @@ void draw_current_screen(ssd1306_t *disp,
                         oled_screen_t screen,
                         const oled_flags_t *flags,
                         const sensor_data_t *data);
+void draw_screen_startup(ssd1306_t *disp);
 void draw_icon_1bit(ssd1306_t *disp,
                     uint32_t x,
                     uint32_t y,
