@@ -109,6 +109,8 @@ int main() {
     absolute_time_t next_wifi_chk = make_timeout_time_ms(5000);
     absolute_time_t next_oled     = make_timeout_time_ms(1000);
 
+    draw_screen_startup(&disp);
+
     while (true) {
 
         // Check WiFi connection every 5 seconds and attempt reconnection if needed.
