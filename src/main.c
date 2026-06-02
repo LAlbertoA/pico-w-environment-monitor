@@ -26,6 +26,7 @@
 #include "oled.h"
 #include "ntp.h"
 #include "buttons.h"
+#include "sht40.h"
 
 // Server configuration (can be overridden at compile time).
 #ifndef SERVER_IP
@@ -39,6 +40,10 @@
 
 // =============== DHT11 ===============
 #define DHT_PIN 15
+// =============== SHT40 ===============
+// since i2c can be used in the same pins using different addresses, w use SDA/SCL_PIN for SHT40
+//#define SHT40_SDA_PIN 4
+//#define SHT40_SCL_PIN 5
 
 // ===== GAS (CJMCU-6814) ADC pins =====
 #define NO2_GPIO 26
@@ -81,7 +86,6 @@ int main() {
     // Initialize WiFi, sensors, and OLED display.
     dht11_init(DHT_PIN);
     mics6814_init(CO_GPIO, NH3_GPIO, NO2_GPIO);
-
     i2c_init(I2C_PORT, 400000);
     gpio_set_function(SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(SCL_PIN, GPIO_FUNC_I2C);
@@ -89,6 +93,7 @@ int main() {
     gpio_pull_up(SCL_PIN);
 
     oled_init_display(&disp, I2C_PORT);
+	sht40_init(I2C_PORT, SHT40_DEFAULT_ADDR);
     
     draw_screen_startup(&disp);
 
@@ -99,17 +104,20 @@ int main() {
     status_flags.wifi_ok = wifi_init_and_connect();
     status_flags.dht_ok  = false;
     status_flags.gas_ok  = false;
+	status_flags.sht40_ok = false;
 
-    sensor_data.t = 0;
-    sensor_data.h = 0;
+    sensor_data.t = 0.0;
+    sensor_data.h = 0.0;
     sensor_data.co_raw  = 0;
     sensor_data.nh3_raw = 0;
     sensor_data.no2_raw = 0;
 
-    absolute_time_t next_dht      = make_timeout_time_ms(10000);
-    absolute_time_t next_gas      = make_timeout_time_ms(4000);
-    absolute_time_t next_wifi_chk = make_timeout_time_ms(5000);
-    absolute_time_t next_oled     = make_timeout_time_ms(1000);
+    absolute_time_t next_dht       = make_timeout_time_ms(10000);
+	absolute_time_t next_sht40     = make_timeout_time_ms(1000);
+	absolute_time_t next_send_temp = make_timeout_time_ms(10000);
+    absolute_time_t next_gas       = make_timeout_time_ms(4000);
+    absolute_time_t next_wifi_chk  = make_timeout_time_ms(5000);
+    absolute_time_t next_oled      = make_timeout_time_ms(1000);
 
     while (true) {
 
@@ -122,22 +130,38 @@ int main() {
                 printf("Reconexion %s\n", status_flags.wifi_ok ? "EXITOSA" : "FALLIDA");
             }
             next_wifi_chk = delayed_by_ms(next_wifi_chk, 5000);
-        }
+        }		
 
-        // Read DHT11 every 10 seconds and POST data if WiFi is connected.
+        // Read DHT11 every 10 seconds.
         if (time_reached(next_dht)) {
-            status_flags.dht_ok = dht11_read(&sensor_data.t, &sensor_data.h);
-            if (status_flags.wifi_ok && status_flags.dht_ok) {
-                char body[64];
-                snprintf(body, sizeof(body), "DHT,T=%d,H=%d\n", sensor_data.t, sensor_data.h);
-                bool ok = http_post_text(SERVER_IP, SERVER_PORT, "/dht", body);
-                if (!ok) {
-                    status_flags.wifi_ok = wifi_is_connected(); // Check if failure was due to WiFi disconnect
-                }
-                printf("POST /dht => %s | %s\n", ok ? "OK" : "FAIL", body);
-            }
+			int temp, hum;
+            status_flags.dht_ok = dht11_read(&temp, &hum);
+			if (status_flags.dht_ok && !status_flags.sht40_ok) {
+				sensor_data.t = (float)temp;
+				sensor_data.h = (float)hum;
+			}
             next_dht = delayed_by_ms(next_dht, 10000);
         }
+
+		// Read SHT40 every 1 second.
+		if (time_reached(next_sht40)) {
+			status_flags.sht40_ok = sht40_read(&sensor_data.t, &sensor_data.h);
+			next_sht40 = delayed_by_ms(next_sht40, 1000);
+		}
+
+		// Send temperature/humidity data every 10 seconds if WiFi is connected.
+		if (time_reached(next_send_temp)) {
+			if (status_flags.wifi_ok) {
+				char body[64];
+				snprintf(body, sizeof(body), "DHT,T=%.1f,H=%.1f\n", sensor_data.t, sensor_data.h);
+				bool ok = http_post_text(SERVER_IP, SERVER_PORT, "/dht", body);
+				if (!ok) {
+					status_flags.wifi_ok = wifi_is_connected();
+				}
+				printf("POST /dht => %s | %s\n", ok ? "OK" : "FAIL", body);
+			}
+			next_send_temp = delayed_by_ms(next_send_temp, 10000);
+		}
 
         // Read MICS6814 gas sensor every 4 seconds and POST data if WiFi is connected.
         if (time_reached(next_gas)) {

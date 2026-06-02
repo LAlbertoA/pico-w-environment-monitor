@@ -9,11 +9,12 @@ typedef struct {
     bool wifi_ok;
     bool gas_ok;
     bool dht_ok;
+	bool sht40_ok;
 } oled_flags_t;
 
 typedef struct {
-    int t;
-    int h;
+    float t;
+    float h;
     uint16_t co_raw;
     uint16_t nh3_raw;
     uint16_t no2_raw;

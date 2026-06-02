@@ -79,35 +79,37 @@ void draw_status_bar(ssd1306_t *disp, bool wifi_connected, bool gas_ok, bool tem
     ssd1306_draw_line(disp, 127, 0, 127, 63);
     ssd1306_draw_line(disp, 0, 63, 127, 63);
     ssd1306_draw_line(disp, 0, 0, 0, 63);
-    ssd1306_draw_line(disp, 0, 11, 127, 11);
+    ssd1306_draw_line(disp, 0, 15, 127, 15);
     
-    draw_wifi_icon(disp, 117, 1, wifi_connected);
+    draw_wifi_icon(disp, 117, 3, wifi_connected);
 
     if (gas_ok) {
-        ssd1306_draw_string(disp, 108, 2, 1, "G");
+        ssd1306_draw_string(disp, 108, 4, 1, "G");
     }
     if (temp_ok) {
-        ssd1306_draw_string(disp, 99, 2, 1, "T");
+        ssd1306_draw_string(disp, 99, 4, 1, "T");
     }
 
-    ssd1306_draw_string(disp, 2, 2, 1, time_str);
+    ssd1306_draw_string(disp, 2, 4, 1, time_str);
 }
 
 void draw_screen_main(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
     char buf1[32];
     char buf2[32];
+	bool has_temp = flags->dht_ok || flags->sht40_ok;
 
     ssd1306_clear(disp);
-    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
 
-    ssd1306_draw_string(disp, 2, 12, 1, flags->wifi_ok ? "WiFi OK" : "WiFi FAIL");
+    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, has_temp);
+
+    ssd1306_draw_string(disp, 2, 16, 1, flags->wifi_ok ? "WiFi OK" : "WiFi FAIL");
     
-    if (flags->dht_ok) {
-        snprintf(buf1, sizeof(buf1), "T:%dC H:%d%%", data->t, data->h);
+    if (has_temp) {
+        snprintf(buf1, sizeof(buf1), "T:%.1fC H:%.1f%%", data->t, data->h);
     } else {
         snprintf(buf1, sizeof(buf1), "DHT11 FAIL");
     }
-    ssd1306_draw_string(disp, 2, 22, 1, buf1);
+    ssd1306_draw_string(disp, 2, 26, 1, buf1);
 
     if (flags->gas_ok) {
         snprintf(buf1, sizeof(buf1), "CO:%u NH3:%u", data->co_raw, data->nh3_raw);
@@ -117,8 +119,8 @@ void draw_screen_main(ssd1306_t *disp, const oled_flags_t *flags, const sensor_d
         snprintf(buf2, sizeof(buf2), "GAS (NO2) FAIL");
     }
 
-    ssd1306_draw_string(disp, 2, 32, 1, buf1);
-    ssd1306_draw_string(disp, 2, 42, 1, buf2);
+    ssd1306_draw_string(disp, 2, 36, 1, buf1);
+    ssd1306_draw_string(disp, 2, 46, 1, buf2);
 
     ssd1306_show(disp);
 }
@@ -126,19 +128,20 @@ void draw_screen_main(ssd1306_t *disp, const oled_flags_t *flags, const sensor_d
 void draw_screen_second(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
     char buf1[32];
     char buf2[32];
+	bool has_temp = flags->dht_ok || flags->sht40_ok;
 
     ssd1306_clear(disp);
-    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
+    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, has_temp);
 
-    if (flags->dht_ok) {
-        snprintf(buf1, sizeof(buf1), "T:%dC", data->t);
-        snprintf(buf2, sizeof(buf2), "H:%d%%", data->h);
+    if (has_temp) {
+        snprintf(buf1, sizeof(buf1), "T:%.1fC", data->t);
+        snprintf(buf2, sizeof(buf2), "H:%.1f%%", data->h);
     } else {
         snprintf(buf1, sizeof(buf1), "DHT11 FAIL");
         snprintf(buf2, sizeof(buf2), "Waiting ...");
     }
-    ssd1306_draw_string(disp, 2, 13, 2, buf1);
-    ssd1306_draw_string(disp, 2, 33, 2, buf2);
+    ssd1306_draw_string(disp, 2, 17, 2, buf1);
+    ssd1306_draw_string(disp, 2, 37, 2, buf2);
     draw_icon_1bit(disp, 96, 18, icon_temp_32, 32, 32);
 
     ssd1306_show(disp);
@@ -148,9 +151,10 @@ void draw_screen_third(ssd1306_t *disp, const oled_flags_t *flags, const sensor_
     char buf1[32];
     char buf2[32];
     char buf3[32];
+	bool has_temp = flags->dht_ok || flags->sht40_ok;
 
     ssd1306_clear(disp);
-    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
+    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, has_temp);
 
     if (flags->gas_ok) {
         snprintf(buf1, sizeof(buf1), "CO:%u", data->co_raw);
@@ -161,9 +165,9 @@ void draw_screen_third(ssd1306_t *disp, const oled_flags_t *flags, const sensor_
         snprintf(buf2, sizeof(buf2), "Waiting ...");
         snprintf(buf3, sizeof(buf3), "");
     }
-    ssd1306_draw_string(disp, 2, 13, 2, buf1);
-    ssd1306_draw_string(disp, 2, 30, 2, buf2);
-    ssd1306_draw_string(disp, 2, 47, 2, buf3);
+    ssd1306_draw_string(disp, 2, 17, 2, buf1);
+    ssd1306_draw_string(disp, 2, 34, 2, buf2);
+    ssd1306_draw_string(disp, 2, 51, 2, buf3);
 
     ssd1306_show(disp);
 }
@@ -171,17 +175,18 @@ void draw_screen_third(ssd1306_t *disp, const oled_flags_t *flags, const sensor_
 void draw_screen_fourth(ssd1306_t *disp, const oled_flags_t *flags, const sensor_data_t *data) {
     char buf1[32];
     char buf2[32];
+	bool has_temp = flags->dht_ok || flags->sht40_ok;
 
     ssd1306_clear(disp);
-    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, flags->dht_ok);
+    draw_status_bar(disp, flags->wifi_ok, flags->gas_ok, has_temp);
 
     ntp_get_date_str(buf1, sizeof(buf1));
     ntp_get_time_str(buf2, sizeof(buf2));
     char* buf3 = getenv("TZ") ? tzname[0] : "UTC";
 
-    ssd1306_draw_string(disp, 2, 13, 2, buf1);
-    ssd1306_draw_string(disp, 2, 30, 2, buf2);
-    ssd1306_draw_string(disp, 2, 47, 2, buf3);
+    ssd1306_draw_string(disp, 2, 17, 2, buf1);
+    ssd1306_draw_string(disp, 2, 34, 2, buf2);
+    ssd1306_draw_string(disp, 2, 51, 2, buf3);
 
     ssd1306_show(disp);
 }
