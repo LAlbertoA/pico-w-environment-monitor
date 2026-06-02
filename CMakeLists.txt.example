@@ -22,6 +22,8 @@ add_executable(env_monitor
     src/debug_state.c
     src/ntp.c
     src/buttons.c
+	src/icons.c
+	src/sht40.c
     ${OLED_DIR}/ssd1306.c
 )
 
