@@ -16,6 +16,9 @@
 #include "pico/cyw43_arch.h"
 #include "hardware/i2c.h"
 
+// Pico Configuration header for device-specific settings.
+#include "device_config.h"
+
 // Hardware-specific headers for DHT11, MICS6814, OLED, WiFi.
 #include "dht11.h"
 #include "mics6814.h"
@@ -153,7 +156,9 @@ int main() {
 		if (time_reached(next_send_temp)) {
 			if (status_flags.wifi_ok) {
 				char body[64];
-				snprintf(body, sizeof(body), "DHT,T=%.1f,H=%.1f\n", sensor_data.t, sensor_data.h);
+				snprintf(body, sizeof(body),
+					"DHT,ROOM=%s,DEVICE=%02u,T=%.1f,H=%.1f\n",
+					g_device_config.room_id, g_device_config.device_id, sensor_data.t, sensor_data.h);
 				bool ok = http_post_text(SERVER_IP, SERVER_PORT, "/dht", body);
 				if (!ok) {
 					status_flags.wifi_ok = wifi_is_connected();
@@ -175,8 +180,8 @@ int main() {
                 if (status_flags.wifi_ok) {
                     char body[128];
                     snprintf(body, sizeof(body),
-                            "GAS,CO=%u,NH3=%u,NO2=%u,COv=%.3f,NH3v=%.3f,NO2v=%.3f\n",
-                            sensor_data.co_raw, sensor_data.nh3_raw, sensor_data.no2_raw, co_v, nh3_v, no2_v);
+                        "GAS,ROOM=%s,DEVICE=%02u,CO=%u,NH3=%u,NO2=%u,COv=%.3f,NH3v=%.3f,NO2v=%.3f\n",
+                        g_device_config.room_id, g_device_config.device_id, sensor_data.co_raw, sensor_data.nh3_raw, sensor_data.no2_raw, co_v, nh3_v, no2_v);
                     bool ok = http_post_text(SERVER_IP, SERVER_PORT, "/gas", body);
                     if (!ok) {
                         status_flags.wifi_ok = wifi_is_connected(); // Check if failure was due to WiFi disconnect
